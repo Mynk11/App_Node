@@ -1,10 +1,12 @@
 //Dependency
-var config1 = require("./config1");
+var config1 = require("./lib/config1");
 var http = require("http");
 var https = require('https');
 var url = require("url");
 var fs = require("fs");
-//var _data = require('./lib/data');
+var handlers = require('./lib/handlers');
+var helpers = require('./lib/helpers');
+var _data = require('./lib/data');
 console.log("config is :" + config1);
 var StringnDecoder = require('string_decoder').StringDecoder;
 //the server should respond to all request with a string
@@ -13,8 +15,6 @@ var StringnDecoder = require('string_decoder').StringDecoder;
 //rm -rf .git*
 
 
-//Testing
-//@todo delete this
 
 // _data.delete('test', 'newFile', function (err) {
 //   console.log("this was the error", err);
@@ -91,7 +91,7 @@ var unifiedServer = function (req, res) {
       'queryStringObject': queryStringObject,
       'method': method,
       'headers': headers,
-      'payload': buffer
+      'payload': helpers.parseJsonToObject(buffer)
 
     };
     //Route the request to the chosen handler
@@ -119,17 +119,9 @@ var unifiedServer = function (req, res) {
 
 
 
-//define a request router
-var handlers = {};
-handlers.ping = function (data, callback) {
-  //callback a http status code, and a payload object
-  callback(200);
-};
 
-handlers.notFound = function (data, callback) {
-  callback(404);
-};
 
 var router = {
-  'ping': handlers.ping
+  'ping': handlers.ping,
+  'users': handlers.users
 };
