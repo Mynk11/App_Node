@@ -27,7 +27,7 @@ var httpServer = http.createServer(function (req, res) {
 
 //Start the server and have it listen on port 3000
 httpServer.listen(config1.httpPort, function () {
-  console.log("the server is listening on " + config1.httpPort + "in " + config1.envName + " mode");
+  console.log("the server is listening on " + config1.httpPort + " in " + config1.envName + " mode");
 });
 
 
@@ -41,15 +41,15 @@ var httpsServer = https.createServer(httpsServerOptions, function (req, res) {
 });
 
 //Start the server and have it listen on port 3000
-httpsServer.listen(config1.httpsPort, function () {
+/* httpsServer.listen(config1.httpsPort, function () {
   console.log("the server is listening on " + config1.httpsPort + "in " + config1.envName + " mode");
-});
+}); */
 
 //  all the server logic for both the http and https server
 
 var unifiedServer = function (req, res) {
   //get the url and parse it
-
+  //this is true to allow query string to parse through url
   var parsedUrl = url.parse(req.url, true);
   //this true allow the query to be passed further
   //get the path
@@ -64,7 +64,9 @@ var unifiedServer = function (req, res) {
   //get the query string as an object
 
   var queryStringObject = parsedUrl.query;
-  console.log(queryStringObject);
+  Object.keys(queryStringObject).forEach((key) => {
+    console.log(`key is  ${queryStringObject[key]}`);
+  });
 
   //get the http method
 
@@ -72,7 +74,7 @@ var unifiedServer = function (req, res) {
   console.log(`Request on path is ${trimmedPath} with this method ${method} and query is :`, queryStringObject);
   //get the header as an object
   var headers = req.headers;
-  console.log("the requested header is ", headers);
+  //console.log("the requested header is ", headers);
   //get the apyload if any
   var decoder = new StringnDecoder('utf-8');
   var buffer = '';
