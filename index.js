@@ -41,12 +41,12 @@ var httpsServer = https.createServer(httpsServerOptions, function (req, res) {
 });
 
 //Start the server and have it listen on port 3000
-/* httpsServer.listen(config1.httpsPort, function () {
+httpsServer.listen(config1.httpsPort, function () {
   console.log("the server is listening on " + config1.httpsPort + "in " + config1.envName + " mode");
-}); */
+});
 
 //  all the server logic for both the http and https server
-
+// TODO
 var unifiedServer = function (req, res) {
   //get the url and parse it
   //this is true to allow query string to parse through url
@@ -101,13 +101,12 @@ var unifiedServer = function (req, res) {
     chosenHandler(data, function (statusCode, payload) {
       //use the status code callback by the handler or default 200
       //use the payload callback by the handler or default to an empty object
+      console.log("The payload is :", payload);
       statusCode = typeof (statusCode) == 'number' ? statusCode : 200;
-      payload = typeof (payload) == 'object' ? payload : {};
+      payload = typeof (payload) == 'object' || 'string' ? payload : {};
+      console.log("The payload is :", payload);
       //convert the payload to a string
       var payloadString = JSON.stringify(payload);
-
-
-
       res.setHeader('Content-Type', 'application/json');
       res.writeHead(statusCode);
       res.end(payloadString);
@@ -125,5 +124,6 @@ var unifiedServer = function (req, res) {
 
 var router = {
   'ping': handlers.ping,
-  'users': handlers.users
+  'users': handlers.users,
+  'hello': handlers.hello
 };
